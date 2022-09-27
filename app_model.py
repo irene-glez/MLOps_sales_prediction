@@ -22,8 +22,8 @@ def predict():
     tv = request.args.get('tv', None)
     radio = request.args.get('radio', None)
     newspaper = request.args.get('newspaper', None)
-
-    return model.predict([[tv,radio,newspaper]])
+    prediction = model.predict([[tv,radio,newspaper]])
+    return "The prediction of sales investing that amount of money in TV, radio and newspaper is: " + str(round(prediction[0],2)) + 'k €'
 
     # if tv is None or radio is None or newspaper is None:
     #     return "Missing args, the input values are needed to predict"
