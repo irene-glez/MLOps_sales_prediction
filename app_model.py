@@ -17,12 +17,13 @@ def hello():
 # 1. Crea un endpoint que devuelva la predicción de los nuevos datos enviados mediante argumentos en la llamada
 @app.route('/v1/predict', methods=['GET'])
 def predict():
-    return "holi"
     # model = pickle.load(open('data/advertising_model','rb'))
 
-    # tv = request.args.get('tv', None)
+    tv = request.args.get('tv', None)
     # radio = request.args.get('radio', None)
     # newspaper = request.args.get('newspaper', None)
+
+        return tv
 
     # if tv is None or radio is None or newspaper is None:
     #     return "Missing args, the input values are needed to predict"
