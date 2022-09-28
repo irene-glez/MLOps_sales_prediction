@@ -3,7 +3,7 @@ import os
 import pickle
 from sklearn.model_selection import cross_val_score
 import pandas as pd
-
+import sqlite3
 
 os.chdir(os.path.dirname(__file__))
 
@@ -31,11 +31,20 @@ def predict():
 # # 2. endpoint para almacenar nuevos registros en la base de datos que deberá estar previamente creada. (/ingest_data)
 @app.route('/ingest_data', methods=['GET'])
 def retrain():
+    connection = sqlite3.connect("my_database.db")
+    crsr = connection.cursor()
+
     tv = request.args.get('tv', None)
     radio = request.args.get('radio', None)
     newspaper = request.args.get('newspaper', None)
     sales = request.args.get('sales', None)
-    return "your data:" + tv + radio + newspaper + sales
+
+    insertion = "INSERT INTO advertising (TV, radio, newspaper, sales) VALUES ('tv' , 'radio' , 'newspaper' , 'sales')"
+    crsr.execute(insertion)
+    connection.commit()
+
+    return print(crsr.rowcount, "record inserted.")
+
 #     df = pd.read_csv('data/Advertising.csv', index_col=0)
 #     X = df.drop(columns=['sales'])
 #     y = df['sales']
