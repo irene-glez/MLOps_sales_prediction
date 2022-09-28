@@ -30,7 +30,7 @@ def predict():
 
 # # 2. endpoint para almacenar nuevos registros en la base de datos que deberá estar previamente creada. (/ingest_data)
 @app.route('/ingest_data', methods=['GET'])
-def retrain():
+def ingest():
     connection = sqlite3.connect("my_database.db")
     crsr = connection.cursor()
 
@@ -40,7 +40,7 @@ def retrain():
     sales = request.args.get('sales', None)
 
     insertion = "INSERT INTO advertising (TV, radio, newspaper, sales) VALUES ('tv' , 'radio' , 'newspaper' , 'sales')"
-    crsr.execute(insertion,(tv, radio, newspaper, sales))
+    crsr.execute(insertion,(tv, radio, newspaper, sales)).fetchall()
     connection.commit()
 
     return print(crsr.rowcount, "record inserted.")
