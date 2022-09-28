@@ -51,14 +51,14 @@ def retrain():
     connection = sqlite3.connect("my_database.db")
     crsr = connection.cursor()
 
-    query = '''SELECT * FROM advertisng'''
+    query = '''SELECT * FROM advertising'''
 
     crsr.execute(query)
     data = crsr.fetchall()
     cols = [description[0] for description in crsr.description]
     df = pd.DataFrame(data, columns=cols)
 
-    X = df[['tv', 'radio', 'newsaper']]
+    X = df[['tv', 'radio', 'newspaper']]
     y = df['sales']
 
     model = pickle.load(open('data/advertising_model','rb'))
