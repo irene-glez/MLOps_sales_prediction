@@ -43,7 +43,7 @@ def ingest_data():
     crsr.execute(insertion,(tv, radio, newspaper, sales)).fetchall()
     connection.commit()
 
-    return str(crsr.rowcount) + "record inserted."
+    return str(crsr.rowcount) + " record inserted."
 
 # 3 Reentrenar de nuevo el modelo con los posibles nuevos registros que se recojan. (/retrain)
 @app.route('/retrain', methods=['GET'])
