@@ -40,7 +40,7 @@ def retrain():
     sales = request.args.get('sales', None)
 
     insertion = "INSERT INTO advertising (TV, radio, newspaper, sales) VALUES ('tv' , 'radio' , 'newspaper' , 'sales')"
-    crsr.execute(insertion)
+    crsr.execute(insertion,(tv, radio, newspaper, sales))
     connection.commit()
 
     return print(crsr.rowcount, "record inserted.")
