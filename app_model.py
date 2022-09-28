@@ -12,12 +12,12 @@ app.config['DEBUG'] = True
 
 @app.route("/", methods=['GET'])
 def hello():
-    return "Bienvenido a mi API del modelo advertising"
+    return "Bienvenido a mi API para el modelo advertising"
 
 # 1. endpoint que devuelva la predicción de los nuevos datos enviados mediante argumentos en la llamada (/predict):
 @app.route('/predict', methods=['GET'])
 def predict():
-    model = pickle.load(open('advertising_model','rb'))
+    model = pickle.load(open('data/advertising_model','rb'))
 
     tv = request.args.get('tv', None)
     radio = request.args.get('radio', None)
@@ -46,18 +46,25 @@ def ingest_data():
     return str(crsr.rowcount) + "record inserted."
 
 # 3 Reentrenar de nuevo el modelo con los posibles nuevos registros que se recojan. (/retrain)
+@app.route('/retrain', methods=['GET'])
+def retrain():
+    connection = sqlite3.connect("my_database.db")
+    crsr = connection.cursor()
 
-#     df = pd.read_csv('data/Advertising.csv', index_col=0)
-#     X = df.drop(columns=['sales'])
-#     y = df['sales']
+    query = '''SELECT * FROM advertisng'''
 
-#     model = pickle.load(open('data/advertising_model','rb'))
-#     model.fit(X,y)
-#     pickle.dump(model, open('data/advertising_model_v1','wb'))
+    crsr.execute(query)
+    data = crsr.fetchall()
+    cols = [description[0] for description in crsr.description]
+    df = pd.DataFrame(data, columns=cols)
 
-#     scores = cross_val_score(model, X, y, cv=10, scoring='neg_mean_absolute_error')
+    X = df[['tv', 'radio', 'newsaper']]
+    y = df['sales']
 
-#     return "New model retrained and saved as advertising_model_v1. The results of MAE with cross validation of 10 folds is: " + str(abs(round(scores.mean(),2)))
+    model = pickle.load(open('data/advertising_model','rb'))
+    model.fit(X,y)
+    scores = cross_val_score(model, X, y, cv=10, scoring='neg_mean_absolute_error')
 
+    pickle.dump(model, open('advertising_model_retrain_v1','wb'))
 
-# app.run()
+    return "New model retrained and saved as advertising_model_retrain_v1. The results of MAE with cross validation of 10 folds is: " + str(abs(round(scores.mean(),2)))
