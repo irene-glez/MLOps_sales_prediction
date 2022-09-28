@@ -30,20 +30,20 @@ def predict():
 
 # # 2. endpoint para almacenar nuevos registros en la base de datos que deberá estar previamente creada. (/ingest_data)
 @app.route('/ingest_data', methods=['GET'])
-def ingest():
+def ingest_data():
     connection = sqlite3.connect("my_database.db")
     crsr = connection.cursor()
 
-    tv = request.args.get('tv', None)
-    radio = request.args.get('radio', None)
-    newspaper = request.args.get('newspaper', None)
-    sales = request.args.get('sales', None)
+    tv = request.args.get('tv', 0)
+    radio = request.args.get('radio', 0)
+    newspaper = request.args.get('newspaper', 0)
+    sales = request.args.get('sales', 0)
 
-    insertion = '''INSERT INTO advertising (TV, radio, newspaper, sales) VALUES ('tv' , 'radio' , 'newspaper' , 'sales')'''
+    insertion = '''INSERT INTO advertising (TV, radio, newspaper, sales) VALUES (?,?,?,?)'''
     crsr.execute(insertion,(tv, radio, newspaper, sales)).fetchall()
     connection.commit()
 
-    return print(crsr.rowcount, "record inserted.")
+    return str(crsr.rowcount) + "record inserted."
 
 # 3 Reentrenar de nuevo el modelo con los posibles nuevos registros que se recojan. (/retrain)
 
