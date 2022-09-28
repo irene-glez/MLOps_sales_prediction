@@ -39,11 +39,13 @@ def ingest():
     newspaper = request.args.get('newspaper', None)
     sales = request.args.get('sales', None)
 
-    insertion = "INSERT INTO advertising (TV, radio, newspaper, sales) VALUES ('tv' , 'radio' , 'newspaper' , 'sales')"
+    insertion = '''INSERT INTO advertising (TV, radio, newspaper, sales) VALUES ('tv' , 'radio' , 'newspaper' , 'sales')'''
     crsr.execute(insertion,(tv, radio, newspaper, sales)).fetchall()
     connection.commit()
 
     return print(crsr.rowcount, "record inserted.")
+
+# 3 Reentrenar de nuevo el modelo con los posibles nuevos registros que se recojan. (/retrain)
 
 #     df = pd.read_csv('data/Advertising.csv', index_col=0)
 #     X = df.drop(columns=['sales'])
