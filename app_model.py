@@ -31,7 +31,7 @@ def predict():
 # # 2. endpoint para almacenar nuevos registros en la base de datos que deberá estar previamente creada. (/ingest_data)
 @app.route('/ingest_data', methods=['GET'])
 def ingest_data():
-    connection = sqlite3.connect("my_database.db")
+    connection = sqlite3.connect("data/my_database.db")
     crsr = connection.cursor()
 
     tv = request.args.get('tv', 0)
@@ -48,7 +48,7 @@ def ingest_data():
 # 3 Reentrenar de nuevo el modelo con los posibles nuevos registros que se recojan. (/retrain)
 @app.route('/retrain', methods=['GET'])
 def retrain():
-    connection = sqlite3.connect("my_database.db")
+    connection = sqlite3.connect("data/my_database.db")
     crsr = connection.cursor()
 
     query = '''SELECT * FROM advertising'''
@@ -58,7 +58,7 @@ def retrain():
     cols = [description[0] for description in crsr.description]
     df = pd.DataFrame(data, columns=cols)
 
-    X = df[['TV', 'radio', 'newspaper']]
+    X = df.drop(columns=['sales'])
     y = df['sales']
 
     model = pickle.load(open('data/advertising_model','rb'))
