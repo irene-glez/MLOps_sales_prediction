@@ -58,7 +58,7 @@ def retrain():
     cols = [description[0] for description in crsr.description]
     df = pd.DataFrame(data, columns=cols)
 
-    X = df[['tv', 'radio', 'newspaper']]
+    X = df[['TV', 'radio', 'newspaper']]
     y = df['sales']
 
     model = pickle.load(open('data/advertising_model','rb'))
