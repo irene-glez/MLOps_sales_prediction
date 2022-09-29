@@ -94,4 +94,4 @@ def retrain():
     pickle.dump(model, open('advertising_model_retrain_v1','wb'))
 
 
-    return "New model retrained and saved as advertising_model_retrain_v1."
+    return "New model retrained and saved as advertising_model_retrain_v1...."
