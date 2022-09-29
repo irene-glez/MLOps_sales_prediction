@@ -48,23 +48,46 @@ def ingest_data():
 # 3 Reentrenar de nuevo el modelo con los posibles nuevos registros que se recojan. (/retrain)
 @app.route('/retrain', methods=['GET'])
 def retrain():
-    connection = sqlite3.connect("data/my_database.db")
-    crsr = connection.cursor()
+    # connection = sqlite3.connect("data/my_database.db")
+    # crsr = connection.cursor()
 
-    query = '''SELECT * FROM advertising'''
+    # query = '''SELECT * FROM advertising'''
 
-    crsr.execute(query)
-    data = crsr.fetchall()
-    cols = [description[0] for description in crsr.description]
-    df = pd.DataFrame(data, columns=cols)
+    # crsr.execute(query)
+    # data = crsr.fetchall()
+    # cols = [description[0] for description in crsr.description]
+    # df = pd.DataFrame(data, columns=cols)
+
+    # X = df.drop(columns=['sales'])
+    # y = df['sales']
+
+    # model = pickle.load(open('data/advertising_model','rb'))
+    # model.fit(X,y)
+    # scores = cross_val_score(model, X, y, cv=10, scoring='neg_mean_absolute_error')
+
+    # pickle.dump(model, open('advertising_model_retrain_v1','wb'))
+
+
+    def sql_query(query):
+        connection = sqlite3.connect('data/mydatabase.db')
+        cursor = connection.cursor()
+        cursor.execute(query)
+        ans = cursor.fetchall()
+
+        names = [description[0] for description in cursor.description]
+        connection.commit()
+
+        return pd.DataFrame(ans,columns=names)
+
+    df = sql_query('''SELECT * FROM advertising''')
 
     X = df.drop(columns=['sales'])
     y = df['sales']
 
     model = pickle.load(open('data/advertising_model','rb'))
     model.fit(X,y)
-    scores = cross_val_score(model, X, y, cv=10, scoring='neg_mean_absolute_error')
 
     pickle.dump(model, open('advertising_model_retrain_v1','wb'))
+
 
     return "New model retrained and saved as advertising_model_retrain_v1. The results of MAE with cross validation of 10 folds is: " + str(abs(round(scores.mean(),2)))
