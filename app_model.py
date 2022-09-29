@@ -87,7 +87,7 @@ def retrain():
     model = pickle.load(open('data/advertising_model','rb'))
     model.fit(X,y)
 
-    # pickle.dump(model, open('advertising_model_retrain_v1','wb'))
+    pickle.dump(model, open('advertising_model_retrain_v1','wb'))
 
 
     return "New model retrained and saved as advertising_model_retrain_v1."
