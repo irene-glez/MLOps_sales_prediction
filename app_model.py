@@ -1,7 +1,11 @@
 from flask import Flask, request, jsonify
 import os
 import pickle
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
 import pandas as pd
 import sqlite3
 
