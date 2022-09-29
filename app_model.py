@@ -76,7 +76,7 @@ def retrain():
 
         names = [description[0] for description in cursor.description]
         connection.commit()
-
+        connection.close()
         return pd.DataFrame(ans,columns=names)
 
     df = sql_query('''SELECT * FROM advertising''')
