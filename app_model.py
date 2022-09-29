@@ -90,4 +90,4 @@ def retrain():
     pickle.dump(model, open('advertising_model_retrain_v1','wb'))
 
 
-    return "New model retrained and saved as advertising_model_retrain_v1. The results of MAE with cross validation of 10 folds is: " + str(abs(round(scores.mean(),2)))
+    return "New model retrained and saved as advertising_model_retrain_v1."
